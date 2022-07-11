@@ -105,32 +105,35 @@ def main():
     sql_limit = parse_args().event_count if args else sql_limit
     populate_browser_paths(get_users())
     for browser_path in browser_paths:
-        if browser_paths[browser_path] == "firefox":
-            sql_query = f"SELECT url, visit_count, last_visit_date " \
-                        f"FROM moz_places " \
-                        f"ORDER BY last_visit_date " \
-                        f"DESC LIMIT {sql_limit};"
-            execute_sql(browser_path, sql_query, f"firefox")
-        elif browser_paths[browser_path] == "safari":
-            sql_query = f"SELECT history_items.url, history_items.visit_count, " \
-                        f"history_visits.visit_time " \
-                        f"FROM history_items " \
-                        f"INNER JOIN history_visits on history_items.id=history_visits.history_item " \
-                        f"ORDER BY history_visits.visit_time " \
-                        f"DESC LIMIT {sql_limit};"
-            execute_sql(browser_path, sql_query, f"safari")
-        elif browser_paths[browser_path] == "edge":
-            sql_query = f"SELECT url, visit_count, last_visit_time " \
-                        f"FROM urls " \
-                        f"ORDER BY last_visit_time " \
-                        f"DESC LIMIT {sql_limit};"
-            execute_sql(browser_path, sql_query, f"edge")
-        elif browser_paths[browser_path] == "chrome":
-            sql_query = f"SELECT url, visit_count, last_visit_time " \
-                        f"FROM urls " \
-                        f"ORDER BY last_visit_time " \
-                        f"DESC LIMIT {sql_limit};"
-            execute_sql(browser_path, sql_query, f"chrome")
+        if os.path.exists(browser_path):
+            if browser_paths[browser_path] == "firefox":
+                sql_query = f"SELECT url, visit_count, last_visit_date " \
+                            f"FROM moz_places " \
+                            f"ORDER BY last_visit_date " \
+                            f"DESC LIMIT {sql_limit};"
+                execute_sql(browser_path, sql_query, f"firefox")
+            elif browser_paths[browser_path] == "safari":
+                sql_query = f"SELECT history_items.url, history_items.visit_count, " \
+                            f"history_visits.visit_time " \
+                            f"FROM history_items " \
+                            f"INNER JOIN history_visits on history_items.id=history_visits.history_item " \
+                            f"ORDER BY history_visits.visit_time " \
+                            f"DESC LIMIT {sql_limit};"
+                execute_sql(browser_path, sql_query, f"safari")
+            elif browser_paths[browser_path] == "edge":
+                sql_query = f"SELECT url, visit_count, last_visit_time " \
+                            f"FROM urls " \
+                            f"ORDER BY last_visit_time " \
+                            f"DESC LIMIT {sql_limit};"
+                execute_sql(browser_path, sql_query, f"edge")
+            elif browser_paths[browser_path] == "chrome":
+                sql_query = f"SELECT url, visit_count, last_visit_time " \
+                            f"FROM urls " \
+                            f"ORDER BY last_visit_time " \
+                            f"DESC LIMIT {sql_limit};"
+                execute_sql(browser_path, sql_query, f"chrome")
+        else:
+            print(f"[!] Path Not Found: {browser_path}")
 
 
 if __name__ == "__main__":

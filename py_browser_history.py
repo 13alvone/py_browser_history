@@ -90,12 +90,15 @@ def execute_sql(_browser_path, _sql_query, _browser):
         url = row[0].replace(f".", f"[.]").replace(f":", f"[:]")
         visit_count = row[1]
         visit_time = row[2]
-        if _browser == "chrome" or _browser == "edge":
-            visit_time = date_from_webkit(visit_time)
-        elif _browser == "firefox":
-            visit_time = date_from_firefox(visit_time)
-        elif _browser == "safari":
-            visit_time = date_from_cocoa(visit_time)
+        if visit_time:
+            if _browser == "chrome" or _browser == "edge":
+                visit_time = date_from_webkit(visit_time)
+            elif _browser == "firefox":
+                visit_time = date_from_firefox(visit_time)
+            elif _browser == "safari":
+                visit_time = date_from_cocoa(visit_time)
+        else:
+            visit_time = datetime.datetime.now().strftime("%H:%M:%S")
         print(f"{visit_time}|{visit_count}|{url}|{_browser}|{action_user}")
 
 
